@@ -4,6 +4,17 @@ ACTION=`defaults read com.freron.MailMate MmMailManCommandAction 2>/dev/null`
 if [ -z "${ACTION}" ]; then
 	ACTION="openMessage"
 fi
+if [ ! -z ${MM_DEBUG+x} ] && [ $MM_DEBUG ]
+then
+    echo "MM_TO is ${MM_TO}" >> /tmp/MailMan.log
+fi
+export MM_ADDRESS=`${MM_BUNDLE_SUPPORT}/bin/table_lookup ${MM_TO}`
+if [ ! -z ${MM_DEBUG+x} ] && [ $MM_DEBUG ]
+then
+    echo "MM_ADDRESS is ${MM_ADDRESS}" >> /tmp/MailMan.log
+    echo "ACTION = ${ACTION}." >> /tmp/MailMan.log
+fi
+
 
 cat << END
 { actions = (
@@ -13,14 +24,16 @@ cat << END
 			headers = {
 				"#posting-style" = "top";
 				"#signature" = "";
-				"from" = "${MM_TO}";
+				"from" = "${MM_ADDRESS}";
+                                "tags" = "Don'tSave";
 			};
 			resultActions = (
 				{
 					type = "${ACTION}";
-				}
+				};
 			);
-		},
+		};
 	);
 }
 END
+
