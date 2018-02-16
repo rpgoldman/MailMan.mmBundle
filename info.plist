@@ -9,8 +9,8 @@
 	<key>description</key>
 	<string>Commands for the MailMan mailing list software.</string>
 	<key>name</key>
-	<string>MailMan</string>
+	<string>Enhanced MailMan</string>
 	<key>uuid</key>
-	<string>5ED82AEE-926C-476F-A4D6-FA6E1E89F246</string>
+        <string>EC81B9E9-4AAF-4342-8A15-761027EA5E57</string>
 </dict>
 </plist>
