@@ -1,4 +1,26 @@
-# Features
+# Enhancements
+
+This "Enhanced MailMan Bundle" is a fork of the MailMan bundle
+included with MailMate.  It is as the original, however, in order to
+handle lists whose delivery includes address rewriting, it allows the
+user to save a `.mailman-addresses` file in their home directory,
+which is (for now) a perl hash mapping delivery addresses to sender
+addresses.  That way, when one receives email addressed to
+`foobar-list-owner@hosting.com` one can rewrite the address to an
+address the mailman instance will accept.
+
+Currently this is only implemented for the "Reject" messages, since as
+a moderator, I have found my task is almost solely rejection.
+
+## To do:
+
+* Replace the use of a perl literal with a config file, which will be
+  safer, but needs to be handled without forcing dependencies on the
+  user.
+
+* Extend the address rewriting to acceptance emails.
+
+# Original Features
 
 This bundle groks the `List-*` headers used by MailMan based systems.
 
