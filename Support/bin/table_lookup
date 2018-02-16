@@ -1,0 +1,47 @@
+#! /usr/bin/env perl
+
+my $tableFilename = "$ENV{HOME}/.mailman-addresses";
+my $logfile;
+if ( $ENV{"DEBUG_MM"} ) {
+  $logfile = "/tmp/MailMan.log";
+} else {
+  $logfile = "/dev/null";
+}
+open(LOG, ">>$logfile");
+local $SIG{__DIE__} = sub {
+    my ($message) = @_;
+    print LOG "$message\n";
+};
+my %table;
+{
+  local $/;           # enable "slurp" mode
+  open(FH, "< $tableFilename") or die "Unable to open table file $tableFilename $!";
+  local $raw = <FH>;
+  close FH;
+#  print "$raw\n";
+  %table = %{eval $raw};
+}
+
+{
+  my @keys = sort(keys(%table));
+  print LOG "@keys\n";
+
+  if ( $ARGV[0] eq $keys[0] ) {
+    print LOG "$ARGV[0] matches a key."
+  } elsif ( $ARGV[0] ne $keys[0] ) {
+    print LOG "Surprisingly $ARGV[0] is not equal to $keys[0]\n";
+  }
+
+  foreach my $key (@keys) {
+    print LOG "$key\t$table{$key}\n";
+  }
+}
+
+my $INPUT_ADDRESS = $ARGV[0];
+chomp $INPUT_ADDRESS;
+#print "$INPUT_ADDRESS\n";
+my $entry = $table{"$INPUT_ADDRESS"};
+die "Unable to find entry for $INPUT_ADDRESS in $tableFilename" unless $entry;
+print LOG "Translating to $entry\n";
+close FH;
+print "$entry\n";
