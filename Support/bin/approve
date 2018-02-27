@@ -5,11 +5,25 @@ ACTION=`defaults read com.freron.MailMate MmMailManCommandAction 2>/dev/null`
 if [ -z "${ACTION}" ]; then
 	ACTION="openMessage"
 fi
+if [ ! -z ${MM_DEBUG+x} ] && [ $MM_DEBUG ]
+then
+    echo "MailMan accept command";
+    echo "MM_TO is ${MM_TO}, PASSWORD before request is ${PASSWORD}, MM_IDENTIFIER is ${MM_IDENTIFIER}" >> /tmp/MailMan.log
+fi
+
 
 # If no password then ask for one
 if [ -z "${PASSWORD}" ]; then
 	PASSWORD=`"${MM_BUNDLE_SUPPORT}/bin/set_password"`
 fi
+
+export MM_ADDRESS=`${MM_BUNDLE_SUPPORT}/bin/table_lookup ${MM_TO}`
+if [ ! -z ${MM_DEBUG+x} ] && [ $MM_DEBUG ]
+then
+    echo "MM_ADDRESS is ${MM_ADDRESS}" >> /tmp/MailMan.log
+    echo "After request, PASSWORD = ${PASSWORD}." >> /tmp/MailMan.log
+fi
+
 
 # If password has been found then create the reply
 if [ -n "${PASSWORD}" ]; then
